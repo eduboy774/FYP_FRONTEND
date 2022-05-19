@@ -28,6 +28,12 @@
 </template>
 <script>
 export default {
+  // apollo: {
+  //   staffAllPreviousAppointments: {
+  //     query: staffAllPreviousAppointments,
+  //     update: (data) => data.staffAllPreviousAppointments,
+  //   },
+  // },
   data() {
     return {
       headers: [
@@ -49,7 +55,7 @@ export default {
           calories: 159,
           fat: 6.0,
           carbs: 24,
-          protein:5,
+          protein: 5,
           iron: "T/UDOM/2018.03592",
         },
         {

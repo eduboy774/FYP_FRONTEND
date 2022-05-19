@@ -18,7 +18,7 @@
                         </h4>
                         <v-form ref="form" v-model="valid" lazy-validation>
                           <v-text-field
-                            v-model="email"
+                            v-model="username"
                             :rules="usernameRules"
                             label="Username"
                             prepend-icon="mdi-account"
@@ -171,10 +171,10 @@ export default {
     handleLogin(e) {
       e.preventDefault(e);
       let data = {
-        email: this.email,
+        username: this.username,
         password: this.password,
       };
-      // console.log(data);
+      console.log(data);
       this.$emit("login-handler", data);
     },
     handleSubmitEmail(e) {

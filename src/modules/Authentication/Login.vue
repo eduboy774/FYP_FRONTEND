@@ -24,8 +24,8 @@ import gql from "graphql-tag";
 import router from "../../router";
 
 const LOGIN_QUERY = gql`
-  mutation ($email: String!, $password: String!) {
-    tokenAuth(email: $email, password: $password) {
+  mutation ($username: String!, $password: String!) {
+    tokenAuth(username: $username, password: $password) {
       token
       success
       errors

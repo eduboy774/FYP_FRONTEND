@@ -56,8 +56,8 @@ export default {
         },
 
         {
-          title: "Complains",
-          icon: "mdi-comment-eye",
+          title: "Previous",
+          icon: "mdi-skip-previous-circle-outline",
           route: "/students/complains_complains",
         },
         {
@@ -65,7 +65,6 @@ export default {
           icon: "mdi-lightbulb",
           route: "/students/track_complains",
         },
-        // { title: 'Teams', icon: 'mdi-account-group-outline',route:'/admin_page/' },
       ],
     };
   },

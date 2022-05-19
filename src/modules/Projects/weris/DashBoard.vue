@@ -16,7 +16,11 @@
                 <v-card-title> Completed Appointment</v-card-title>
                 <v-card-text
                   ><span>
-                    <center><v-chip color="#3cd1c2">12</v-chip></center></span
+                    <center>
+                      <v-chip color="#3cd1c2">{{
+                        countCompletedStaffAppointments
+                      }}</v-chip>
+                    </center></span
                   ></v-card-text
                 >
                 <v-icon small color="#3cd1c2">mdi-comment-check</v-icon>
@@ -37,7 +41,11 @@
                 <v-card-title> Appointment Delayed</v-card-title>
                 <v-card-text
                   ><span>
-                    <center><v-chip color="#f83e70">12</v-chip></center></span
+                    <center>
+                      <v-chip color="#f83e70">{{
+                        countDelayedStaffAppointments
+                      }}</v-chip>
+                    </center></span
                   ></v-card-text
                 >
                 <v-icon small color="#f83e70">mdi-cached</v-icon>
@@ -77,7 +85,11 @@
                 <v-card-title>Appointment on Hold</v-card-title>
                 <v-card-text
                   ><span>
-                    <center><v-chip color="#ffaa2c">12</v-chip></center></span
+                    <center>
+                      <v-chip color="#ffaa2c">{{
+                        countOnHoldStaffAppointments
+                      }}</v-chip>
+                    </center></span
                   ></v-card-text
                 >
                 <v-icon small color="primary">mdi-comment-flash</v-icon>
@@ -122,12 +134,45 @@
 <script>
 import VueApexCharts from "vue-apexcharts";
 
+import gql from "graphql-tag";
+
+const countCompletedStaffAppointments = gql`
+  query {
+    countCompletedStaffAppointments(staffId: "2")
+  }
+`;
+
+const countDelayedStaffAppointments = gql`
+  query {
+    countDelayedStaffAppointments(staffId: "2")
+  }
+`;
+const countOnHoldStaffAppointments = gql`
+  query {
+    countOnHoldStaffAppointments(staffId: "")
+  }
+`;
 export default {
+  apollo: {
+    countCompletedStaffAppointments: {
+      query: countCompletedStaffAppointments,
+      update: (data) => data.countCompletedStaffAppointments,
+    },
+    countDelayedStaffAppointments: {
+      query: countDelayedStaffAppointments,
+      update: (data) => data.countDelayedStaffAppointments,
+    },
+    countOnHoldStaffAppointments: {
+      query: countOnHoldStaffAppointments,
+      update: (data) => data.countOnHoldStaffAppointments,
+    },
+  },
   components: {
     apexcharts: VueApexCharts,
   },
   data: function () {
     return {
+      countCompletedStaffAppointments: null,
       chartOptions: {
         chart: {
           id: "basic-bar",
@@ -144,7 +189,7 @@ export default {
       },
       series: [
         {
-          name: "series-1",
+          name: "Completed",
           data: [10, 50, 49, 60, 91],
         },
       ],

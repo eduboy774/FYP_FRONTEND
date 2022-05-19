@@ -22,7 +22,7 @@
                     <v-row>
                       <v-col cols="12" sm="6" class="d-flex">
                         <v-autocomplete
-                          v-model="appointmentCriteria.type_of_appointment"
+                          v-model="appointmentType"
                           :items="items1"
                           dense
                           chips
@@ -35,8 +35,8 @@
                       </v-col>
                       <v-col class="d-flex" cols="12" sm="6">
                         <v-autocomplete
-                          v-model="appointmentCriteria.category_of_appointment"
-                          :items="items"
+                          v-model="appointmentCategory"
+                          :items="items2"
                           dense
                           chips
                           small-chips
@@ -52,7 +52,7 @@
                     <v-row>
                       <v-col cols="12" sm="6" class="d-flex">
                         <v-autocomplete
-                          v-model="appointmentCriteria.with_who_appointment"
+                          v-model="with_who_appointment"
                           :items="items"
                           dense
                           chips
@@ -65,7 +65,7 @@
                       </v-col>
                       <v-col cols="12" sm="6" class="d-flex">
                         <v-textarea
-                          v-model="appointmentCriteria.appointment_reason"
+                          v-model="appointmentDescription"
                           label="Reason"
                           auto-grow
                           outlined
@@ -86,6 +86,12 @@
                         x-large
                         v-model="appointmentCriteria.phone"
                       ></vue-tel-input-vuetify> -->
+                      <input type="hidden" v-model="staffId" value="2" />
+                      <input
+                        type="hidden"
+                        v-model="studentRegNumber"
+                        value="1"
+                      />
                     </v-col>
                     <v-col cols="12" sm="6" class="d-flex">
                       <div class="text-center">
@@ -132,24 +138,27 @@
 export default {
   data: () => ({
     items1: ["Individual", "Group"],
-    items: ["Supervisor", "Bursar", "Administrator", "HOd"],
+    items: ["Isack", "Yogona", "Kalulu"],
+    items2: ["FYP", "Private", "Academic Advisor", "other"],
     time: null,
     menu2: false,
     modal2: false,
     valid: false,
-    appointmentCriteria: {
-      with_who_appointment: "",
-      appointment_reason: "",
-      category_of_appointment: "",
-      type_of_appointment: "",
-      // phone: null,
-    },
+    appointmentType: "",
+    appointmentDescription: "",
+    appointmentCategory: "",
+    staffId: "2",
+    studentRegNumber: "1",
   }),
   methods: {
     SubmitAppointment() {
       this.$refs.form.validate();
       let data = {
-        appointmentCriteria: this.appointmentCriteria,
+        appointmentType: this.appointmentType,
+        appointmentDescription: this.appointmentDescription,
+        appointmentCategory: this.appointmentCategory,
+        staffId: this.staffId,
+        studentRegNumber: this.studentRegNumber,
       };
       console.log(data);
       this.$emit("submit-appointment", data);

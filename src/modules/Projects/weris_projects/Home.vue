@@ -17,7 +17,7 @@
                     :elevation="hover ? 16 : 2"
                     :class="{ 'on-hover': hover }"
                     link
-                    to="/projecti"
+                    to="/projecti/dashboard"
                   >
                     <v-card max-width="344" max-height="20" color="primary">
                     </v-card>
