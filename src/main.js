@@ -8,8 +8,9 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import VueTelInputVuetify from "vue-tel-input-vuetify/lib";
 
 // connect to  backend
-import apolloProvider from "./apollo_client";
+// import apolloProvider from "./apollo_client";
 import { DEBUG } from "./settings";
+import { createProvider } from "./vue-apollo";
 
 Vue.config.productionTip = DEBUG;
 Vue.config.productionTip = false;
@@ -26,7 +27,7 @@ const options = {
 Vue.use(VueSweetalert2, options);
 new Vue({
   router,
-  apolloProvider,
   vuetify,
+  apolloProvider: createProvider(),
   render: (h) => h(App),
 }).$mount("#app");

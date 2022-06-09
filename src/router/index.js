@@ -18,7 +18,7 @@ import Previous_Appointment from "../modules/Projects/weris/Previous_Appointment
 import Capture_fingerprint from "../modules/Users/Capture_fingerprint";
 import Make_Appointment from "../modules/Projects/weris/MakeAppointment.vue";
 import Complains from "../modules/Complains/Complains_Main/Complains_Main";
-import Complains_Complains from "../modules/Students/Student_Main/Student_Other/Students_Complains/Complains_complains.vue";
+import Complains_Complains from "../modules/Students/Student_Main/Student_Other/student_previous_appointment.vue";
 import Complains_Dashboard from "../modules/Complains/Complains_Main/other_complains/Complains_Dashboard.vue";
 import Reporting_Dashboard from "../modules/Reporting/Report_Main/Other_Report/Report_Dashboard.vue";
 import Student from "../modules/Students/Student_Main/Student_Other/Students_Main.vue";
@@ -117,7 +117,7 @@ const routes = [
     component: Complains,
     children: [
       {
-        path: "complains_complains",
+        path: "complains_Complains",
         name: "complains_Complains",
         component: Complains_Complains,
       },
@@ -159,7 +159,7 @@ const routes = [
         component: Request_Appointment,
       },
       {
-        path: "complains_complains",
+        path: "student_previous_appointment",
         name: "complains_Complains",
         component: Complains_Complains,
       },

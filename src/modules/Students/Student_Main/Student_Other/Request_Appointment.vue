@@ -7,17 +7,21 @@ import RequestAppointmentContent from "./RequestAppointmentContent.vue";
 import gql from "graphql-tag";
 
 const createAppointment = gql`
-  mutation (
+  mutation createAppointment(
+    $appointmentTime: String!
     $appointmentType: String!
     $appointmentDescription: String!
     $appointmentCategory: String!
     $staffId: String!
     $studentRegNumber: String!
+    $appointmentDate: String!
   ) {
     createAppointment(
+      appointmentTime: $appointmentTime
       appointmentType: $appointmentType
       appointmentDescription: $appointmentDescription
       appointmentCategory: $appointmentCategory
+      appointmentDate: $appointmentDate
       staffId: $staffId
       studentRegNumber: $studentRegNumber
     ) {
@@ -39,15 +43,15 @@ export default {
         variables: data,
         update: (cache, { data }) => {
           console.log(data);
-          if (!data) {
-            console.log("No data");
-            {
-              this.$swal.fire(
-                "Good job!",
-                "You clicked the button!",
-                "success"
-              );
-            }
+          if (!data.createAppointment.appointment.appointmentId) {
+            console.log(data.createAppointment.appointmentId);
+            this.$swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Appointment Success Requested",
+              showConfirmButton: true,
+              timer: 1500,
+            });
           }
         },
       });

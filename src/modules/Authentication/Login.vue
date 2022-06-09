@@ -1,37 +1,13 @@
 <template>
   <div>
-    <!-- <v-alert
-      v-for="err of errors"
-      :key="err.code"
-      border="bottom"
-      color="red"
-      dismissible
-      elevation="21"
-      icon="mdi-alert-circle"
-      type="error"
-    >
-      {{ err.message }}
-    </v-alert> -->
     <Login_Page @login-handler="loginHandler" />
   </div>
 </template>
 
 <script>
 import Login_Page from "./LoginContent.vue";
-
-// creating mutation here
-import gql from "graphql-tag";
 import router from "../../router";
-
-const LOGIN_QUERY = gql`
-  mutation ($username: String!, $password: String!) {
-    tokenAuth(username: $username, password: $password) {
-      token
-      success
-      errors
-    }
-  }
-`;
+import auth from "../../gql/auth.gql";
 
 export default {
   name: "Login",
@@ -46,12 +22,19 @@ export default {
   methods: {
     loginHandler(data) {
       this.$apollo.mutate({
-        mutation: LOGIN_QUERY,
+        mutation: auth,
         variables: data,
         update: (cache, { data }) => {
           console.log(data);
           if (!data.tokenAuth.errors) {
             localStorage.setItem("token", data.tokenAuth.token);
+            if (data.tokenAuth.user.isStaff) {
+              router.push("/home");
+            } else if (!data.tokenAuth.user.isStaff) {
+              router.push("/students");
+            } else {
+              router.push("/admin_page");
+            }
             const Toast = this.$swal.mixin({
               toast: true,
               position: "top-end",
@@ -68,7 +51,6 @@ export default {
               icon: "success",
               title: "Signed in successfully",
             });
-            router.push("/home");
           } else {
             let errors = [];
             for (let e of data.tokenAuth.errors.nonFieldErrors) {

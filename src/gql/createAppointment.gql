@@ -1,0 +1,23 @@
+ mutation createAppointment(
+    $appointmentTime: String!
+    $appointmentType: String!
+    $appointmentDescription: String!
+    $appointmentCategory: String!
+    $staffId: String!
+    $studentRegNumber: String!
+    $appointmentDate:String !
+  ) {
+    createAppointment(
+      appointmentTime: $appointmentTime
+      appointmentType: $appointmentType
+      appointmentDescription: $appointmentDescription
+      appointmentCategory: $appointmentCategory
+      appointmentDate: $appointmentDate
+      staffId: $staffId
+      studentRegNumber: $studentRegNumber
+    ) {
+      appointment {
+        appointmentTime
+      }
+    }
+  }

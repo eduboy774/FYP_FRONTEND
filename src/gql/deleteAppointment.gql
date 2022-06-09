@@ -1,0 +1,14 @@
+mutation DeleteAppointment(
+  $id:ID !
+  
+)
+{
+  deleteAppointment(
+    id:$id){
+    appointment{
+      appointmentStatus
+    }
+   }
+  
+  
+}

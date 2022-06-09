@@ -24,21 +24,19 @@
               <v-layout row wrap>
                 <v-row>
                   <v-col cols="12" sm="6">
-                    <!-- <div
-                      v-for="allAppointment in allAppointments"
-                      :key="allAppointment.appointmentId"
+                    <v-select
+                      v-model="new_appointment"
+                      outlined
+                      solo
+                      small
+                      :items="allAppointments"
+                      item-value="appointmentId"
+                      :item-text="
+                        (item) =>
+                          `${item.appointmentId} ${item.appointmentStatus} ${item.appointmentCategory}`
+                      "
                     >
-                      {{ allAppointment.appointmentId }}
-                    </div> -->
-                    <v-select outline solo>
-                      <options
-                        v-for="allAppointment in allAppointments"
-                        :key="allAppointment.allAppointmentId"
-                      >
-                        {{ allAppointment.appointmentId }}
-                      </options>
                     </v-select>
-                    <div></div>
                   </v-col>
                   <v-col cols="12" sm="6">
                     <div class="text-center">
@@ -60,6 +58,7 @@
                                   x-small
                                   outlined
                                   class="captosmall"
+                                  @click="AcceptAppointment"
                                 >
                                   Accept
                                 </v-btn>
@@ -157,7 +156,7 @@
                                     outlined
                                     x-small
                                     roundedallStaffs
-                                    @click="dialog = false"
+                                    @click="AcceptAppointment"
                                   >
                                     Schedule
                                   </v-btn>
@@ -208,7 +207,6 @@ import gql from "graphql-tag";
 const allAppointments = gql`
   query {
     allAppointments {
-      appointmentStatus
       appointmentId
       appointmentTime
       appointmentStatus
@@ -222,6 +220,8 @@ const countNewStaffAppointments = gql`
     countNewStaffAppointments(staffId: "3")
   }
 `;
+import deleteAppointment from "../../../gql/deleteAppointment.gql";
+
 export default {
   apollo: {
     allAppointments: {
@@ -236,13 +236,28 @@ export default {
   data: () => ({
     dialog: false,
     time: null,
+    date: null,
     menu2: false,
     modal2: false,
+    countNewStaffAppointments: [],
     allStaffs: [],
     allAppointments: [],
+    id: "",
+    editedIndex: -1,
+    watch: {
+      dialog(val) {
+        val || this.close();
+      },
+      dialogDelete(val) {
+        val || this.closeDelete();
+      },
+    },
   }),
   methods: {
     showAlert() {
+      let data = {
+        id: this.new_appointment,
+      };
       this.$swal
         .fire({
           title: "Are you sure?",
@@ -251,17 +266,31 @@ export default {
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
           cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, delete it!",
+          confirmButtonText: "Yes, reject it!",
         })
         .then((result) => {
           if (result.isConfirmed) {
+            this.$apollo.mutate({
+              mutation: deleteAppointment,
+              variables: data,
+            });
+
             this.$swal.fire(
               "Deleted!",
-              "Your file has been deleted.",
+              "Your Appointment has been rejected.",
               "success"
             );
+            this.allAppointments.splice(this.editedIndex, 1);
           }
         });
+    },
+    AcceptAppointment() {
+      let data = {
+        appointmentId: this.new_appointment,
+        time: this.time,
+        date: this.date,
+      };
+      console.log(data);
     },
   },
 };

@@ -10,6 +10,7 @@
           </v-layout>
           <br /><br />
           <v-divider> </v-divider>
+
           <br />
           <center left>
             <h3 color="indigo">Make Appointment</h3>
@@ -22,7 +23,8 @@
                     <v-col cols="12" sm="6" class="d-flex">
                       <v-autocomplete
                         v-model="appointmentType"
-                        :items="items"
+                        :rules="[(v) => !!v || 'Item is required']"
+                        :items="items2"
                         dense
                         chips
                         small-chips
@@ -34,6 +36,7 @@
                     <v-col class="d-flex" cols="12" sm="6">
                       <v-autocomplete
                         v-model="appointmentCategory"
+                        :rules="[(v) => !!v || 'Item is required']"
                         :items="items1"
                         dense
                         chips
@@ -48,14 +51,17 @@
                     <v-col cols="12" sm="6" class="d-flex">
                       <v-select
                         v-model="with_who_appointment"
-                        :items="allstaffs"
+                        :rules="[(v) => !!v || 'Item is required']"
+                        label="with"
                         dense
-                        chips
                         small-chips
-                        label="With"
                         outlined
-                        small
-                        value="2"
+                        :items="allStaffs"
+                        item-value="staffId"
+                        :item-text="
+                          (item) =>
+                            `${item.staffFirstName} ${item.staffSurname}`
+                        "
                       >
                       </v-select>
                     </v-col>
@@ -69,6 +75,7 @@
                         row-height="25"
                         shaped
                         required
+                        :rules="reasonRules"
                       ></v-textarea>
                     </v-col>
                   </v-layout>
@@ -89,7 +96,6 @@
                             readonly
                             v-bind="attrs"
                             v-on="on"
-                            format="24hr"
                           ></v-text-field>
                         </template>
                         <v-time-picker
@@ -147,14 +153,6 @@
                   </v-layout>
                   <v-layout row wrap>
                     <v-col class="d-flex" cols="12" sm="6">
-                      <input type="hidden" v-model="staffId" value="2" />
-                      <input
-                        type="hidden"
-                        v-model="studentRegNumber"
-                        value="1"
-                      />
-                    </v-col>
-                    <v-col class="d-flex" cols="12" sm="6">
                       <v-btn
                         color="primary"
                         class="hange"
@@ -193,34 +191,33 @@ export default {
     },
   },
   data: () => ({
-    items: ["Individual", "Group"],
+    items2: ["Individual", "Group"],
     items1: ["Academic Advisor ", "Private", "FYP", "Other"],
+    allStaffs: [],
     menu2: false,
     modal2: false,
     phone: null,
     dialog2: null,
     dialog: null,
     modal: null,
-    allStaffs: [],
-    allstaffs: ["Mr Isack", "Leila"],
     appointmentType: "",
-    appointmentDate: null,
-    appointmentTime: null,
-    appointmentDescription: null,
-    with_who_appointment: "2",
-    staffId: "2",
+    appointmentDate: "",
+    appointmentTime: "",
+    appointmentDescription: "",
+    with_who_appointment: "",
+    appointmentCategory: "",
     studentRegNumber: "1",
+    reasonRules: [(v) => !!v || "The input is required"],
   }),
   methods: {
     createAppointment() {
-      const data = {
+      let data = {
         appointmentDescription: this.appointmentDescription,
         appointmentTime: this.appointmentTime,
         appointmentType: this.appointmentType,
         appointmentDate: this.appointmentDate,
         appointmentCategory: this.appointmentCategory,
-        // with_who_appointment: this.with_who_appointment,
-        staffId: this.staffId,
+        staffId: this.with_who_appointment,
         studentRegNumber: this.studentRegNumber,
       };
       console.log(data);

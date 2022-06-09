@@ -24,6 +24,7 @@
                         <v-autocomplete
                           v-model="appointmentType"
                           :items="items1"
+                          :rules="[(v) => !!v || 'Item is required']"
                           dense
                           chips
                           small-chips
@@ -36,6 +37,7 @@
                       <v-col class="d-flex" cols="12" sm="6">
                         <v-autocomplete
                           v-model="appointmentCategory"
+                          :rules="[(v) => !!v || 'Item is required']"
                           :items="items2"
                           dense
                           chips
@@ -53,7 +55,6 @@
                       <v-col cols="12" sm="6" class="d-flex">
                         <v-autocomplete
                           v-model="with_who_appointment"
-                          :items="items"
                           dense
                           chips
                           small-chips
@@ -61,6 +62,12 @@
                           outlined
                           small
                           :rules="[(v) => !!v || 'Item is required']"
+                          :items="allStaffs"
+                          item-value="staffId"
+                          :item-text="
+                            (item) =>
+                              `${item.staffFirstName} ${item.staffSurname}`
+                          "
                         ></v-autocomplete>
                       </v-col>
                       <v-col cols="12" sm="6" class="d-flex">
@@ -73,6 +80,7 @@
                           row-height="25"
                           shaped
                           required
+                          :rules="reasonRules"
                         ></v-textarea>
                       </v-col>
                     </v-row>
@@ -80,19 +88,7 @@
                   <br />
                   <br />
                   <v-layout row wrap>
-                    <v-col class="d-flex" cols="12" sm="6">
-                      <!-- <vue-tel-input-vuetify
-                        outlined
-                        x-large
-                        v-model="appointmentCriteria.phone"
-                      ></vue-tel-input-vuetify> -->
-                      <input type="hidden" v-model="staffId" value="2" />
-                      <input
-                        type="hidden"
-                        v-model="studentRegNumber"
-                        value="1"
-                      />
-                    </v-col>
+                    <v-col class="d-flex" cols="12" sm="6"> </v-col>
                     <v-col cols="12" sm="6" class="d-flex">
                       <div class="text-center">
                         <v-btn
@@ -132,13 +128,27 @@
   </v-app>
 </template>
 <script>
-// import gql from "graphql-tag";
+import gql from "graphql-tag";
 
-// const ALL_STAFF_QUERY = gql``;
+const allStaffs = gql`
+  query {
+    allStaffs {
+      staffId
+      staffFirstName
+      staffSurname
+    }
+  }
+`;
 export default {
+  apollo: {
+    allStaffs: {
+      query: allStaffs,
+      update: (data) => data.allStaffs,
+    },
+  },
   data: () => ({
     items1: ["Individual", "Group"],
-    items: ["Isack", "Yogona", "Kalulu"],
+    allStaffs: [],
     items2: ["FYP", "Private", "Academic Advisor", "other"],
     time: null,
     menu2: false,
@@ -147,17 +157,22 @@ export default {
     appointmentType: "",
     appointmentDescription: "",
     appointmentCategory: "",
-    staffId: "2",
+    with_who_appointment: "",
     studentRegNumber: "1",
+    reasonRules: [(v) => !!v || "The input is required"],
+    appointmentDate: "1000-01-01",
+    appointmentTime: "00:00",
   }),
   methods: {
     SubmitAppointment() {
       this.$refs.form.validate();
       let data = {
+        appointmentDate: this.appointmentDate,
+        appointmentTime: this.appointmentTime,
         appointmentType: this.appointmentType,
         appointmentDescription: this.appointmentDescription,
         appointmentCategory: this.appointmentCategory,
-        staffId: this.staffId,
+        staffId: this.with_who_appointment,
         studentRegNumber: this.studentRegNumber,
       };
       console.log(data);

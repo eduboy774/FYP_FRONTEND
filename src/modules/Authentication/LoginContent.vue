@@ -19,8 +19,8 @@
                         <v-form ref="form" v-model="valid" lazy-validation>
                           <v-text-field
                             v-model="username"
-                            :rules="usernameRules"
-                            label="Username"
+                            :rules="emailRules"
+                            label="email"
                             prepend-icon="mdi-account"
                             color="primary--text"
                             required
@@ -151,16 +151,11 @@ export default {
       (v) => (v && v.length <= 10) || "Name must be less than 10 characters",
     ],
     password: "",
-    passwordRules: [
-      (v) => !!v || "Password is required",
-      (v) =>
-        /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/.test(v) ||
-        "Password must contain at least lowercase letter, one number, a special character and one uppercase letter",
-    ],
+    passwordRules: [(v) => !!v || "password is required"],
     email: "",
     emailRules: [
-      (v) => !!v || "E-mail is required",
-      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+      (v) => !!v || "e-mail is required",
+      (v) => /.+@.+\..+/.test(v) || "e-mail must be valid",
     ],
   }),
 

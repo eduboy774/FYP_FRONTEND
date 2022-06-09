@@ -1,0 +1,10 @@
+mutation auth($username: String!, $password: String!) {
+    tokenAuth(email: $username, password: $password) {
+      token,
+      success,
+      errors,
+      user{
+        isStaff
+      }
+    }
+  }

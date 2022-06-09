@@ -3,33 +3,7 @@
 </template>
 
 <script>
-import gql from "graphql-tag";
-
-export const createAppointment = gql`
-  mutation CreateAppointment(
-    $appointmentTime: String!
-    $appointmentDate: String!
-    $appointmentType: String!
-    $appointmentDescription: String!
-    $appointmentCategory: String!
-    $staffId: String!
-    $studentRegNumber: String!
-  ) {
-    createAppointment(
-      appointmentTime: $appointmentTime
-      appointmentDate: $appointmentDate
-      appointmentType: $appointmentType
-      appointmentDescription: $appointmentDescription
-      appointmentCategory: $appointmentCategory
-      staffId: $staffId
-      studentRegNumber: $studentRegNumber
-    ) {
-      appointment {
-        appointmentId
-      }
-    }
-  }
-`;
+import createAppointment from "../../../gql/createAppointment.gql";
 
 import MakeAppointmentContent from "./MakeAppointmentContent.vue";
 export default {
@@ -40,21 +14,21 @@ export default {
     appointment_create(data) {
       this.$apollo.mutate({
         mutation: createAppointment,
-        variables: { data },
+        variables: data,
         update: (cache, { data }) => {
           console.log(data);
-          if (!data.errors) {
-            console.log("success");
-          } else {
-            console.log("error");
+          if (!data.success) {
+            this.$swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Appointment Success Requested",
+              showConfirmButton: false,
+              timer: 1500,
+            });
           }
         },
       });
-      console.log(data);
     },
-    data: () => ({
-      errors: [],
-    }),
   },
 };
 </script>

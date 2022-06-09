@@ -1,0 +1,16 @@
+query allusers
+{
+ users {
+   edges {
+     node {
+       id
+      email
+      username
+      isStaff
+      firstName
+      lastName
+      pk
+     }
+   }
+ }
+}

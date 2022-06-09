@@ -58,7 +58,7 @@ export default {
         {
           title: "Previous",
           icon: "mdi-skip-previous-circle-outline",
-          route: "/students/complains_complains",
+          route: "/students/student_previous_appointment",
         },
         {
           title: "Track Complains",

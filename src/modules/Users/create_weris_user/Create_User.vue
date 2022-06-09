@@ -80,37 +80,44 @@
                               type="password"
                             ></v-text-field>
                           </v-col>
-                          <v-col cols="12" sm="6"> </v-col>
                           <v-col cols="12" sm="6">
-                            <v-menu
-                              v-model="menu2"
-                              :close-on-content-click="false"
-                              :nudge-right="40"
-                              transition="scale-transition"
-                              offset-y
-                              min-width="auto"
-                            >
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-text-field
-                                  v-model="date"
-                                  label="Date of Birth"
-                                  prepend-icon="mdi-calendar-clock"
-                                  readonly
-                                  v-bind="attrs"
-                                  v-on="on"
-                                >
-                                </v-text-field>
-                              </template>
-                              <v-date-picker
-                                dense
-                                v-model="date"
-                                @input="menu2 = false"
-                              ></v-date-picker>
-                            </v-menu>
+                            <vue-tel-input-vuetify
+                              dense
+                              chips
+                              small-chips
+                              outlined
+                            ></vue-tel-input-vuetify>
+                          </v-col>
+                          <v-col cols="12" sm="6">
+                            <v-autocomplete
+                              v-model="select"
+                              dense
+                              chips
+                              small-chips
+                              label="Select Roles"
+                              outlined
+                              small
+                              :rules="[(v) => !!v || 'users is required']"
+                              :items="users_roles"
+                              item-text="name"
+                              item-value="name"
+                            ></v-autocomplete>
+                          </v-col>
+                          <v-col cols="12" sm="6">
+                            <v-autocomplete
+                              v-model="select"
+                              dense
+                              chips
+                              small-chips
+                              label="Select Gender"
+                              outlined
+                              small
+                              :rules="[(v) => !!v || 'gender is required']"
+                              :items="users_gender"
+                            ></v-autocomplete>
                           </v-col>
                         </v-row>
                       </v-container>
-                      <small>*indicates required field</small>
                     </v-card-text>
                     <v-card-actions>
                       <v-spacer></v-spacer>
@@ -136,25 +143,18 @@
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
-
-                <v-btn class="ma-2" outlined color="indigo">
-                  <v-icon small color="primary">
-                    mdi-plus-circle-multiple
-                  </v-icon>
-                  <span><small>Add dummy user</small></span>
-                </v-btn>
-
-                <v-file-input small-chips truncate-length="15">
-                  <span><small>Import(CSV)</small></span>
+                <v-file-input
+                  truncate-length="22"
+                  width="10px"
+                  outlined
+                  chips
+                  class="ma-2"
+                  color="indigo"
+                  placeholder="Import(CSV)"
+                  blur="true"
+                  solo
+                >
                 </v-file-input>
-
-                <v-btn class="ma-2" outlined color="indigo">
-                  <v-icon small color="primary">
-                    mdi-swap-vertical-circle
-                  </v-icon>
-                  <span><small>Import(JSON)</small></span>
-                </v-btn>
-
                 <v-btn class="ma-2" outlined color="indigo">
                   <v-icon small color="primary">
                     mdi-watch-export-variant
@@ -162,12 +162,6 @@
                   <span><small>Export</small></span>
                 </v-btn>
                 <v-spacer></v-spacer>
-                <v-btn class="ma-2" outlined color="indigo" link to="/home">
-                  <v-icon color="primary"> mdi-backburger </v-icon>
-                  <span>
-                    <small>Go back To Home PAge</small>
-                  </span>
-                </v-btn>
               </v-row>
             </v-layout>
           </v-card>
@@ -291,7 +285,25 @@
 
 <script>
 export default {
+  // methods: {
+  //   creating_users() {
+  //     console.log("creating users");
+  //   },
+  // },
   data: () => ({
+    students_other: {
+      degree_prog: null,
+      reg_number: null,
+    },
+    technician_other: {
+      technician_id: null,
+    },
+    staff_other: {
+      staff_office: null,
+      staff_id: null,
+    },
+    users_gender: ["Male", "Female"],
+    users_roles: ["technician", "staff", "student"],
     search: "",
     date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
       .toISOString()
@@ -439,7 +451,7 @@ export default {
 
     deleteItemConfirm() {
       this.desserts.splice(this.editedIndex, 1);
-      this.closeDelete();
+      // this.closeDelete();
     },
 
     close() {
@@ -465,6 +477,9 @@ export default {
         this.desserts.push(this.editedItem);
       }
       this.close();
+    },
+    creating_users() {
+      console.log("creating users");
     },
   },
 };
